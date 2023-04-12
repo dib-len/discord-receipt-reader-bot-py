@@ -14,4 +14,11 @@ bot = commands.Bot(command_prefix='$', intents=intents)
 async def say_hello(ctx):
     await ctx.send('Hello!')
 
+@bot.command(name='receipt')
+async def say_hello(ctx):
+    channel = ctx.channel
+    thread = await channel.create_thread(name='Receipts Thread')
+    await thread.send('Welcome to the Receipts thread!')
+    await thread.send('Please send your images here!')
+
 bot.run(token)
