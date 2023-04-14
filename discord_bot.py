@@ -57,13 +57,20 @@ async def scan_receipt(ctx):
 
 def extract_total(text):
     lines = text.split('\n')
+    total = 0
     for line in lines:
         if re.search("otal", line.lower()):
             try:
                 joinedLine = "".join(line.split())
-                return float(joinedLine[-5:])
+                total = float(joinedLine[-5:])
+                break
             except:
-                return 0
-    return 0
+                try:
+                    joinedLine = "".join(line.split())
+                    total = float(joinedLine[-4:])
+                    break
+                except:
+                    print("Could not find a total price!")
+    return total
 
 bot.run(token)
