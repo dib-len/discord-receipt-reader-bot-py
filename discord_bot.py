@@ -29,31 +29,27 @@ async def say_hello(ctx):
 async def scan_receipt(ctx):
     message = ctx.message
 
-    try:
-        image = message.attachments[0]
-    except:
-        await ctx.send("Please attach a valid image file. EXCEPT")
+    if len(message.attachments) == 0:
+        await ctx.send("Please attach at least one valid image type when using the `$scan` command.")
         return
 
-    if image.filename.lower().endswith(('.png', '.jpg', '.jpeg')) == False:
-        await ctx.send("Please attach a valid image file. ")
-        return
+    for image in message.attachments:
+        if image.filename.lower().endswith(('.png', '.jpg', '.jpeg')) == False:
+            await ctx.send("Please attach a valid image file. ")
+            continue
 
-    response = await image.read()
-    nparr = np.frombuffer(response, np.uint8)
-    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        response = await image.read()
+        nparr = np.frombuffer(response, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
 
-    text = pytesseract.image_to_string(gray)
-    print(text)
+        text = pytesseract.image_to_string(gray)
+        total = extract_total(text)
 
-    total = extract_total(text)
-
-    print("\nTotal:",total)
-    
-    await ctx.send("Image scanned!")
+        print("\nTotal:",total)
+        await ctx.send("Image scanned!")
 
 def extract_total(text):
     lines = text.split('\n')
