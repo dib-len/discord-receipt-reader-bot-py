@@ -6,6 +6,7 @@ import pytesseract
 import cv2
 import numpy as np
 import re
+import pandas as pd
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -28,6 +29,7 @@ async def say_hello(ctx):
 @bot.command(name='scan')
 async def scan_receipt(ctx):
     message = ctx.message
+    df = pd.DataFrame(columns=["Costs"])
 
     if len(message.attachments) == 0:
         await ctx.send("Please attach at least one valid image type when using the `$scan` command.")
@@ -48,8 +50,20 @@ async def scan_receipt(ctx):
         text = pytesseract.image_to_string(gray)
         total = extract_total(text)
 
-        print("\nTotal:",total)
+        print("Total:",total)
+
+        if total == 0:
+            df = df.append({"Costs": 0}, ignore_index=True)
+        else:
+            df = df.append({"Costs": total}, ignore_index=True)
+            
         await ctx.send("Image scanned!")
+
+    # finding the sum of the costs column and adding it to the bottom of the csv file
+    total_cost = df["Costs"].sum()
+    df.loc[df.index.max() + 2] = ["Total: ", total_cost]
+
+    df.to_csv("receipt_cost.csv", index=False)
 
 def extract_total(text):
     lines = text.split('\n')
