@@ -30,35 +30,40 @@ async def scan_receipt(ctx):
     message = ctx.message
 
     try:
-        attachment = message.attachments[0]
+        image = message.attachments[0]
     except:
         await ctx.send("Please attach a valid image file. EXCEPT")
         return
 
-    if attachment.filename.lower().endswith(('.png', '.jpg', '.jpeg')) == False:
+    if image.filename.lower().endswith(('.png', '.jpg', '.jpeg')) == False:
         await ctx.send("Please attach a valid image file. ")
         return
-    
-    response = await attachment.read()
+
+    response = await image.read()
     nparr = np.frombuffer(response, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
-    # Perform OCR on the image to extract the receipt total
-    text = pytesseract.image_to_string(img)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+
+    text = pytesseract.image_to_string(gray)
+    print(text)
+
     total = extract_total(text)
 
-    print(total)
+    print("\nTotal:",total)
     
     await ctx.send("Image scanned!")
 
-
 def extract_total(text):
-    # Search for a decimal number preceded by the word "total"
-    match = re.search(r'total\s*\$?(\d+\.\d+)', text, re.IGNORECASE)
-    if match:
-        return match.group(1)
-    else:
-        return None
-
+    lines = text.split('\n')
+    for line in lines:
+        if re.search("otal", line.lower()):
+            try:
+                joinedLine = "".join(line.split())
+                return float(joinedLine[-5:])
+            except:
+                return 0
+    return 0
 
 bot.run(token)
