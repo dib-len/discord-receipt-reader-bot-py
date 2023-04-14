@@ -27,17 +27,22 @@ async def say_hello(ctx):
     await thread.send('Please send your images here!')
 
 @bot.command(name='scan')
-async def scan_receipt(ctx):
+async def scan_receipt(ctx, *names):
     message = ctx.message
-    df = pd.DataFrame(columns=["Costs"])
+    df = pd.DataFrame(columns=["Names", "Costs"])
 
     if len(message.attachments) == 0:
         await ctx.send("Please attach at least one valid image type when using the `$scan` command.")
         return
 
+    if len(names) != len(message.attachments):
+        await ctx.send("Please provide a name for each image attached.")
+        return
+
     image_order = 1
 
-    for image in message.attachments:
+    for i, (image, name) in enumerate(zip(message.attachments, names)):
+
         if image.filename.lower().endswith(('.png', '.jpg', '.jpeg')) == False:
             await ctx.send("Please attach a valid image file. ")
             continue
@@ -55,9 +60,9 @@ async def scan_receipt(ctx):
         print("Total:",total)
 
         if total == 0:
-            df = pd.concat([df, pd.DataFrame({"Costs": [0]}, index=[0])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame({"Costs": [0], "Names": [name.replace(",", "")]}, index=[i])], ignore_index=True)
         else:
-            df = pd.concat([df, pd.DataFrame({"Costs": [total]})], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame({"Costs": [total], "Names": [name.replace(",", "")]}, index=[i])], ignore_index=True)
 
         if len(message.attachments) > 1:
             await ctx.send(f"Image {image_order} scanned!")
