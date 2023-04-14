@@ -35,6 +35,8 @@ async def scan_receipt(ctx):
         await ctx.send("Please attach at least one valid image type when using the `$scan` command.")
         return
 
+    image_order = 1
+
     for image in message.attachments:
         if image.filename.lower().endswith(('.png', '.jpg', '.jpeg')) == False:
             await ctx.send("Please attach a valid image file. ")
@@ -56,8 +58,13 @@ async def scan_receipt(ctx):
             df = df.append({"Costs": 0}, ignore_index=True)
         else:
             df = df.append({"Costs": total}, ignore_index=True)
+
+        if len(message.attachments) > 1:
+            await ctx.send(f"Image {image_order} scanned!")
+        else:
+            await ctx.send("Image scanned!")
             
-        await ctx.send("Image scanned!")
+        image_order += 1
 
     # finding the sum of the costs column and adding it to the bottom of the csv file
     total_cost = df["Costs"].sum()
