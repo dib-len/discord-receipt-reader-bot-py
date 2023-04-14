@@ -55,9 +55,9 @@ async def scan_receipt(ctx):
         print("Total:",total)
 
         if total == 0:
-            df = df.append({"Costs": 0}, ignore_index=True)
+            df = pd.concat([df, pd.DataFrame({"Costs": [0]}, index=[0])], ignore_index=True)
         else:
-            df = df.append({"Costs": total}, ignore_index=True)
+            df = pd.concat([df, pd.DataFrame({"Costs": [total]})], ignore_index=True)
 
         if len(message.attachments) > 1:
             await ctx.send(f"Image {image_order} scanned!")
@@ -68,9 +68,16 @@ async def scan_receipt(ctx):
 
     # finding the sum of the costs column and adding it to the bottom of the csv file
     total_cost = df["Costs"].sum()
-    df.loc[df.index.max() + 2] = ["Total: ", total_cost]
+    df.loc[df.index.max() + 2, "Costs"] = "Total Cost: " + str(float(total_cost))
 
     df.to_csv("receipt_cost.csv", index=False)
+
+    try:
+        with open('receipt_cost.csv', 'rb') as f:
+            file = discord.File(f, filename='receipt_cost.csv')
+            await ctx.send(file=file)
+    except FileNotFoundError:
+        await ctx.send("CSV file not be found!")
 
 def extract_total(text):
     lines = text.split('\n')
