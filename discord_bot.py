@@ -28,6 +28,10 @@ async def say_hello(ctx):
 
 @bot.command(name='scan')
 async def scan_receipt(ctx, *names):
+    if isinstance(ctx.channel, discord.Thread) == False or ctx.channel.name != 'Receipts Thread':
+        await ctx.send("Please use the `$scan` command in the Receipts Thread!")
+        return
+    
     message = ctx.message
     df = pd.DataFrame(columns=["Names", "Costs"])
 
