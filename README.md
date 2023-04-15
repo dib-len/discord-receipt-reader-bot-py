@@ -1,5 +1,5 @@
 # Discord Receipt Reader Bot
-A Discord bot that allows users to send pictures of receipts, along with the names of who purchased the receipt, and then creates a CSV file containing the total cost of the receipt and who paid the fee. <br />
+A Discord bot that allows users to send pictures of receipts, along with the names of who purchased the receipt, and then creates a CSV file containing the total cost of the receipt and who paid the fee. <br/> <br/>
 The idea came from when the treasurer at the RHUL Computer Science society had to manually add the total costs (along with who the money was owed to) into Google Sheets, for several receipt images in our Discord server.
 
 ## Key Features
