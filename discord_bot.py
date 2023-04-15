@@ -12,23 +12,29 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 load_dotenv()
-token = os.getenv('BOT_TOKEN')
-bot = commands.Bot(command_prefix='$', intents=intents)
+token = os.getenv("BOT_TOKEN")
+bot = commands.Bot(command_prefix="$", intents=intents)
 
-@bot.command(name='hello')
+@bot.command(name="hello")
 async def say_hello(ctx):
-    await ctx.send('Hello!')
+    await ctx.send("Hello!")
 
-@bot.command(name='receipt')
-async def say_hello(ctx):
-    channel = ctx.channel
-    thread = await channel.create_thread(name='Receipts Thread')
-    await thread.send('Welcome to the Receipts thread!')
-    await thread.send('Please send your images here!')
+@bot.command(name="receipt")
+async def create_receipt_thread(ctx):
+    for thread in ctx.guild.threads: # checks all threads in the server
+        if thread.name == "Receipts Thread":
+            await ctx.send(f"Thread already exists! Click here to view it: {thread.jump_url}")
+            return
+    
+    thread = await ctx.channel.create_thread(name="Receipts Thread")
+    await ctx.send("Thread created! Click here to join the thread: {thread.jump_url}")
 
-@bot.command(name='scan')
+    await thread.send("Welcome to the Receipts thread!")
+    await thread.send("Please send your images here!")
+
+@bot.command(name="scan")
 async def scan_receipt(ctx, *names):
-    if isinstance(ctx.channel, discord.Thread) == False or ctx.channel.name != 'Receipts Thread':
+    if isinstance(ctx.channel, discord.Thread) == False or ctx.channel.name != "Receipts Thread":
         await ctx.send("Please use the `$scan` command in the Receipts Thread!")
         return
     
@@ -47,7 +53,7 @@ async def scan_receipt(ctx, *names):
 
     for i, (image, name) in enumerate(zip(message.attachments, names)):
 
-        if image.filename.lower().endswith(('.png', '.jpg', '.jpeg')) == False:
+        if image.filename.lower().endswith((".png", ".jpg", ".jpeg")) == False:
             await ctx.send("Please attach a valid image file. ")
             continue
 
@@ -82,14 +88,14 @@ async def scan_receipt(ctx, *names):
     df.to_csv("receipt_cost.csv", index=False)
 
     try:
-        with open('receipt_cost.csv', 'rb') as f:
-            file = discord.File(f, filename='receipt_cost.csv')
+        with open("receipt_cost.csv", "rb") as f:
+            file = discord.File(f, filename="receipt_cost.csv")
             await ctx.send(file=file)
     except FileNotFoundError:
         await ctx.send("CSV file not be found!")
 
 def extract_total(text):
-    lines = text.split('\n')
+    lines = text.split("\n")
     total = 0
     for line in lines:
         if re.search("otal", line.lower()):
