@@ -21,7 +21,7 @@ The idea came from when the treasurer at the RHUL Computer Science society had t
 - To begin, the command `$receipt` is run, creating a new thread
 <img width="611" alt="Screenshot 2023-04-15 at 01 13 24" src="https://user-images.githubusercontent.com/104798477/232173090-e094f0fd-ecd0-4dea-ad34-fca90b42fe74.png">
 
-- In this thread you upload the images of the receipt
+- In this thread you upload the images of the receipts
 - You must also write the names for who the money is owed to/paid for the receipt's cost
 <img width="553" alt="Screenshot 2023-04-15 at 01 16 40" src="https://user-images.githubusercontent.com/104798477/232173198-39ac1b43-a019-4d60-a511-a06268288325.png">
 
@@ -33,6 +33,7 @@ The idea came from when the treasurer at the RHUL Computer Science society had t
 - This CSV file can be opened in softwares such as Excel or Google sheet to make any fixes or changes
 
 ## Important
-- Please be advised that this bot is not perfect by any means
+- Please be advised that this bot is not 100% accurate with every image scan
+- For the most accurate results for each picture, please ensure the image of the receipt has good lighting and is easy to read
 - It may not detect the total costs, however, it has several error handlers to deal with this
 - You will need to use your own Discord API key if you are to use this in your own server
