@@ -2,6 +2,17 @@
 A Discord bot that allows users to send pictures of receipts, along with the names of who purchased the receipt, and then creates a CSV file containing the total cost of the receipt and who paid the fee. <br/> <br/>
 The idea came from when the treasurer at the RHUL Computer Science society had to manually add the total costs (along with who the money was owed to) into Google Sheets, for several receipt images in our Discord server.
 
+## Packages Used
+- os
+- dotenv
+- discord
+- discord.ext
+- pytesseract
+- cv2 (OpenCV)
+- numpy
+- re
+- pandas
+
 ## Key Features
 - Running the command `$receipt` creates a new thread which is used to upload the images of receipts
 - Upload the images, the command `$scan` along with the names (in the same message containing the image) for it to create a CSV file
