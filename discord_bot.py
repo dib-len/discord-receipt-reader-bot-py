@@ -27,7 +27,7 @@ async def create_receipt_thread(ctx):
             return
     
     thread = await ctx.channel.create_thread(name="Receipts Thread")
-    await ctx.send("Thread created! Click here to join the thread: {thread.jump_url}")
+    await ctx.send(f"Thread created! Click here to join the thread: {thread.jump_url}")
 
     await thread.send("Welcome to the Receipts thread!")
     await thread.send("Please send your images here!")
