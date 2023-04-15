@@ -24,3 +24,4 @@ The idea came from when the treasurer at the RHUL Computer Science society had t
 ## Important
 - Please be advised that this bot is not perfect by any means
 - It may not detect the total costs, however, it has several error handlers to deal with this
+- You will need to use your own Discord API key if you are to use this in your own server
