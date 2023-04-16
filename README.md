@@ -19,16 +19,19 @@ The idea came from when the treasurer at the RHUL Computer Science society had t
 
 ## Example
 - To begin, the command `$receipt` is run, creating a new thread
-<img width="611" alt="Screenshot 2023-04-15 at 01 13 24" src="https://user-images.githubusercontent.com/104798477/232173090-e094f0fd-ecd0-4dea-ad34-fca90b42fe74.png">
+<img width="590" alt="Screenshot 2023-04-16 at 23 43 46" src="https://user-images.githubusercontent.com/104798477/232347153-236d92b4-8fda-43c1-b74e-3286bc58b49d.png">
 
 - In this thread you upload the images of the receipts
 - You must also write the names for who the money is owed to/paid for the receipt's cost
-<img width="553" alt="Screenshot 2023-04-15 at 01 16 40" src="https://user-images.githubusercontent.com/104798477/232173198-39ac1b43-a019-4d60-a511-a06268288325.png">
+<img width="505" alt="Screenshot 2023-04-17 at 00 02 31" src="https://user-images.githubusercontent.com/104798477/232347939-72828be1-4385-4fdf-ae39-57bf9db378df.png">
 
 - Upon hitting enter, the bot will look at each image one by one
-- It then returns a CSV file containing this information
-<img width="310" alt="Screenshot 2023-04-15 at 01 19 21" src="https://user-images.githubusercontent.com/104798477/232173554-02aa6900-56c7-4ff4-9e17-520653752a4c.png">
-<img width="270" alt="Screenshot 2023-04-15 at 01 19 42" src="https://user-images.githubusercontent.com/104798477/232173571-13227d0b-359c-43d2-a64e-0a52237ae350.png">
+- You can send more images after the initial scan to be added to the CSV file
+<img width="336" alt="Screenshot 2023-04-17 at 00 05 28" src="https://user-images.githubusercontent.com/104798477/232348089-fe71fe85-0302-43bf-b48c-3521a0a906ff.png">
+
+- When finished, running the command `$done` closes the thread
+- Returns the CSV file in the origin channel where the `$scan` command was run
+
 
 - This CSV file can be opened in softwares such as Excel or Google sheet to make any fixes or changes
 
