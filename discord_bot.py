@@ -10,6 +10,8 @@ import pandas as pd
 
 intents = discord.Intents.default()
 intents.message_content = True
+df = pd.DataFrame(columns=["Names", "Costs"])
+original_channel = None
 
 load_dotenv()
 token = os.getenv("BOT_TOKEN")
@@ -21,6 +23,8 @@ async def say_hello(ctx):
 
 @bot.command(name="receipt")
 async def create_receipt_thread(ctx):
+    global original_channel
+
     for thread in ctx.guild.threads: # checks all threads in the server
         if thread.name == "Receipts Thread":
             await ctx.send(f"Thread already exists! Click here to view it: {thread.jump_url}")
@@ -31,15 +35,17 @@ async def create_receipt_thread(ctx):
 
     await thread.send("Welcome to the Receipts thread!")
     await thread.send("Please send your images here!")
+    original_channel = ctx
 
 @bot.command(name="scan")
 async def scan_receipt(ctx, *names):
+    global df, original_channel
+
     if isinstance(ctx.channel, discord.Thread) == False or ctx.channel.name != "Receipts Thread":
         await ctx.send("Please use the `$scan` command in the Receipts Thread!")
         return
     
     message = ctx.message
-    df = pd.DataFrame(columns=["Names", "Costs"])
 
     if len(message.attachments) == 0:
         await ctx.send("Please attach at least one valid image type when using the `$scan` command.")
@@ -48,8 +54,6 @@ async def scan_receipt(ctx, *names):
     if len(names) != len(message.attachments):
         await ctx.send("Please provide a name for each image attached.")
         return
-
-    image_order = 1
 
     for i, (image, name) in enumerate(zip(message.attachments, names)):
 
@@ -75,32 +79,31 @@ async def scan_receipt(ctx, *names):
             df = pd.concat([df, pd.DataFrame({"Costs": [total], "Names": [name.replace(",", "")]}, index=[i])], ignore_index=True)
 
         if len(message.attachments) > 1:
-            await ctx.send(f"Image {image_order} scanned!")
+            await ctx.send(f"Image {i + 1} scanned!")
         else:
             await ctx.send("Image scanned!")
-            
-        image_order += 1
 
-    # finding the sum of the costs column and adding it to the bottom of the csv file
+@bot.command(name="done")
+async def close_thread(ctx):
+    global df, original_channel
+
     total_cost = df["Costs"].sum()
-    df.loc[df.index.max() + 2, "Costs"] = "Total Cost: " + str(float(total_cost))
+    df.loc[df.index.max() + 1, "Costs"] = "Total Cost: " + str(float(total_cost))
 
     df.to_csv("receipt_cost.csv", index=False)
 
     try:
         with open("receipt_cost.csv", "rb") as f:
             file = discord.File(f, filename="receipt_cost.csv")
-            await ctx.send(file=file)
+            await original_channel.send(file=file)
     except FileNotFoundError:
-        await ctx.send("CSV file not be found!")
+        await original_channel.send("CSV file not be found!")
 
-@bot.command(name="close")
-async def close_thread(ctx):
     thread = ctx.channel
     if isinstance(thread, discord.Thread) and ctx.channel.name == "Receipts Thread":
         await thread.delete()
     else:
-        await ctx.send("The `$close` command can only be used inside an open Receipts Thread!")
+        await ctx.send("The `$close` command can only be used inside an open Receipts Thread")
 
 def extract_total(text):
     lines = text.split("\n")
@@ -119,7 +122,5 @@ def extract_total(text):
                 except:
                     print("Could not find a total price!")
     return total
-
-
 
 bot.run(token)
