@@ -94,6 +94,14 @@ async def scan_receipt(ctx, *names):
     except FileNotFoundError:
         await ctx.send("CSV file not be found!")
 
+@bot.command(name="close")
+async def close_thread(ctx):
+    thread = ctx.channel
+    if isinstance(thread, discord.Thread) and ctx.channel.name == "Receipts Thread":
+        await thread.delete()
+    else:
+        await ctx.send("The `$close` command can only be used inside an open Receipts Thread!")
+
 def extract_total(text):
     lines = text.split("\n")
     total = 0
@@ -111,5 +119,7 @@ def extract_total(text):
                 except:
                     print("Could not find a total price!")
     return total
+
+
 
 bot.run(token)
