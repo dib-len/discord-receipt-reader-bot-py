@@ -10,8 +10,8 @@ import pandas as pd
 
 intents = discord.Intents.default()
 intents.message_content = True
-df = pd.DataFrame(columns=["Names", "Costs"])
 original_channel = None
+df = None
 
 load_dotenv()
 token = os.getenv("BOT_TOKEN")
@@ -40,6 +40,8 @@ async def create_receipt_thread(ctx):
 @bot.command(name="scan")
 async def scan_receipt(ctx, *names):
     global df, original_channel
+
+    df = pd.DataFrame(columns=["Names", "Costs"])
 
     if isinstance(ctx.channel, discord.Thread) == False or ctx.channel.name != "Receipts Thread":
         await ctx.send("Please use the `$scan` command in the Receipts Thread!")
@@ -104,6 +106,8 @@ async def close_thread(ctx):
         await thread.delete()
     else:
         await ctx.send("The `$close` command can only be used inside an open Receipts Thread")
+
+    
 
 def extract_total(text):
     lines = text.split("\n")
