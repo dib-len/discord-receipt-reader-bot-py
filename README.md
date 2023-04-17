@@ -29,14 +29,15 @@ The idea came from when the treasurer at the RHUL Computer Science society had t
 - You can send more images after the initial scan to be added to the CSV file
 <img width="336" alt="Screenshot 2023-04-17 at 00 05 28" src="https://user-images.githubusercontent.com/104798477/232348089-fe71fe85-0302-43bf-b48c-3521a0a906ff.png">
 
-- When finished, running the command `$done` closes the thread
-- Returns the CSV file in the origin channel where the `$scan` command was run
+- When finished the user must run the command `$done` to close the thread
+- This will also return the CSV file in the origin channel where the `$scan` command was run
+<img width="240" alt="Screenshot 2023-04-17 at 01 05 34" src="https://user-images.githubusercontent.com/104798477/232351278-9a79e2cb-ad43-4f08-9870-ca3bdc95369e.png">
+<img width="246" alt="Screenshot 2023-04-17 at 01 05 55" src="https://user-images.githubusercontent.com/104798477/232351293-2708d6b5-f001-4b4b-8232-d0176aba22cc.png">
 
-
-- This CSV file can be opened in softwares such as Excel or Google sheet to make any fixes or changes
+- These CSV files can be opened in softwares such as Excel or Google sheet to make any changes or fix any errors
 
 ## Important
 - Please be advised that this bot is not 100% accurate with every image scan
-- For the most accurate results for each picture, please ensure the image of the receipt has good lighting and is easy to read
-- It may not detect the total costs, however, it has several error handlers to deal with this
+- For the most accurate results, please ensure the image of the receipt has good lighting and the total price is clearly visible
+- If the total cost cannot be found, 0.0 will be used as the placeholder value (this can be changed in the CSV file)
 - You will need to use your own Discord API key if you are to use this in your own server
