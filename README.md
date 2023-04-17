@@ -15,7 +15,8 @@ The idea came from when the treasurer at the RHUL Computer Science society had t
 
 ## Key Features
 - Running the command `$receipt` creates a new thread which is used to upload the images of receipts
-- Upload the images, the command `$scan` along with the names (in the same message containing the image) for it to create a CSV file
+- Upload the images, the command `$scan` along with the names (in the same message containing the image) for it to save the data into a CSV file
+- The command `$done` closes the thread and sends the CSV file in the channel where `$scan` was originally run
 
 ## Example
 - To begin, the command `$receipt` is run, creating a new thread
